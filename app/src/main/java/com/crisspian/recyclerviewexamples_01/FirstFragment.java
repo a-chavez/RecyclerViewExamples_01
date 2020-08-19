@@ -1,6 +1,7 @@
 package com.crisspian.recyclerviewexamples_01;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,27 +9,45 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.crisspian.recyclerviewexamples_01.adapter.ItemAdapter;
+import com.crisspian.recyclerviewexamples_01.databinding.FragmentFirstBinding;
+import com.crisspian.recyclerviewexamples_01.databinding.ItemListDataBinding;
 import com.crisspian.recyclerviewexamples_01.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstFragment extends Fragment {
+public class FirstFragment extends Fragment implements ItemAdapter.PassElementSelected {
+
+    private FragmentFirstBinding bind;
+    private RecyclerView mRecyclerView;
+    private ItemAdapter mItemAdapter;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
+
     ) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_first, container, false);
+
+        bind = FragmentFirstBinding.inflate(inflater, container,false);
+        mRecyclerView = bind.rvItem;
+        mItemAdapter = new ItemAdapter(returnItemList(), this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mItemAdapter);
+
+        //Log.d("TAG", String.valueOf(returnItemList()));
+        return bind.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-       // NavHostFragment.findNavController(FirstFragment.this).navigate(directions);
     }
 
 
@@ -61,5 +80,13 @@ public class FirstFragment extends Fragment {
         Item item12 = new Item("Wesley Armstrong","https://unsplash.com/photos/q0wqYpyWDpc/download?force=true&w=640");
         listItem.add(item12);
         return listItem;
+    }
+
+    @Override
+    public void passElement(Item item) {
+        Bundle b = new Bundle();
+        b.putString("txt", item.getItemDescription());
+        b.putString("url", item.getUrlImage());
+        Navigation.findNavController(bind.getRoot()).navigate(R.id.action_FirstFragment_to_SecondFragment,b);
     }
 }

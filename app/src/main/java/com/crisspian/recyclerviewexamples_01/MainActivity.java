@@ -1,5 +1,7 @@
 package com.crisspian.recyclerviewexamples_01;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -12,6 +14,7 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,14 +23,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+       // setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+             //   Intent emailIntent = new Intent(Intent.ACTION_VIEW);
+                startActivity(new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:antonio@sisep.cl?subject=Feedback RecyclerView!")));
+                Toast.makeText(MainActivity.this, "Gracias por tu interes !!!", Toast.LENGTH_LONG).show();
+
+              //  Snackbar.make(view, "Gracias por tu interes !!!", Snackbar.LENGTH_LONG)
+               //         .setAction("Action", null).show();
             }
         });
     }
